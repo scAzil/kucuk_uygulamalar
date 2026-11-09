@@ -29,4 +29,3 @@ Kurulum gerektirmeyen, Windows 10/11 üzerinde **yerel olarak** çalışan küç
 
 **Test durumu:** Dosyalar yazıldı ve GitHub'a kaydedildi. Gerçek Windows ortamında uçtan uca test edilmediler. Deneysel sürüm olarak değerlendirilmelidir.
 
-Skype Kurumsal takip aracı bu depoya dahil edilmedi.
