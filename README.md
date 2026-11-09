@@ -1,26 +1,32 @@
-# AZiL — Küçük Uygulamalar
+# AZiL — Küçük Yardımcı Uygulamalar
 
-Windows üzerinde kullanılabilen küçük, bağımsız yardımcı araçların deposu. Büyük masaüstü yazılımlarımız kendi depolarında yayımlanır.
+Kurulum gerektirmeyen, Windows 10/11 üzerinde **yerel olarak** çalışan küçük yardımcı araçlar. Çoğu salt okunur; veri değiştiren seçeneklerde açık onay istenir. Bunlar kamuya açık, erken sürüm kaynak dosyalarıdır; gerçek Windows cihazında uçtan uca test yapılması önerilir.
 
-## Ağ Onarım Aracı v2
+## Araçlar
 
-**Dosya:** [ag_onarim_gelismis_v2.bat](./ag_onarim_gelismis_v2.bat)
+| Araç | Görev | Veri değiştirir mi? | Başlatma |
+| --- | --- | --- | --- |
+| [Büyük Dosya Bulucu](araclar/buyuk_dosya_bulucu/) | Seçilen klasörde en büyük 50 dosyayı ve CSV raporunu oluşturur. | Hayır | [BASLAT.bat](araclar/buyuk_dosya_bulucu/BASLAT.bat) |
+| [SHA-256 Dosya Doğrulayıcı](araclar/sha256_dogrulayici/) | İndirilen dosyanın SHA-256 özetini hesaplar, verilen özetle karşılaştırır. | Yalnızca rapor oluşturur | [BASLAT.bat](araclar/sha256_dogrulayici/BASLAT.bat) |
+| [Güvenli Klasör Yedekleme](araclar/guvenli_klasor_yedekleme/) | Ön izleme sonrası Robocopy ile bir klasörü başka klasöre kopyalar. | **Evet: hedefte mevcut dosyaların üzerine yazabilir.** Silme yapmaz. | [BASLAT.bat](araclar/guvenli_klasor_yedekleme/BASLAT.bat) |
+| [Sistem Özeti](araclar/sistem_ozeti/) | Windows, RAM, CPU, GPU, yerel disk ve etkin güç planını raporlar. | Hayır | [BASLAT.bat](araclar/sistem_ozeti/BASLAT.bat) |
+| [Klasör Karşılaştırma](araclar/klasor_karsilastirma/) | İki klasördeki dosya adı, boyutu ve değişiklik tarihini karşılaştırır; CSV raporu üretir. | Hayır | [BASLAT.bat](araclar/klasor_karsilastirma/BASLAT.bat) |
+| [Gelişmiş Ağ Onarım Aracı v2](ag_onarim_gelismis_v2.bat) | Ağ teşhisi, DNS temizleme ve izinli ağ onarım işlemleri. | **Bazı seçenekler evet** | [BAT dosyası](ag_onarim_gelismis_v2.bat) |
 
-Windows 10/11 için menülü ağ teşhis ve onarım yardımcısıdır. Kaynak kodu açıkça incelenebilir ve ek kurulum gerektirmeyen `.bat` biçimindedir.
+## Kurulum ve başlatma
 
-- Ağ bilgilerini kaydeder; IP, rota, adaptör ve proxy yapılandırma raporları üretir.
-- DNS önbelleğini temizleyebilir.
-- Winsock ve TCP/IP sıfırlama komutlarını **açık onayla ve yönetici yetkisiyle** çalıştırabilir.
-- DHCP IP yenileme, bağlantı testleri ve isteğe bağlı yeniden başlatma seçenekleri içerir.
-- Oturum raporlarını `%LOCALAPPDATA%\AgOnarim\` altında tutar.
+1. Sağ üstteki **Code → Download ZIP** ile tüm depoyu indirip çıkarın veya sadece istediğiniz aracın klasöründeki `.ps1` ve `BASLAT.bat` dosyalarını **aynı klasöre** koyun.
+2. Aracın `BASLAT.bat` dosyasına çift tıklayın. Her araç Windows PowerShell 5.1+ ve Windows'un yerleşik komutlarını kullanır; üçüncü taraf paket indirmez.
+3. Raporlar `%LOCALAPPDATA%\AZiL\KucukUygulamalar\` altına kaydedilir. Ağ Onarım Aracı v2 raporlarını ayrı olarak `%LOCALAPPDATA%\AgOnarim\` altında tutar.
 
-**Uyarı:** 3 (kapsamlı onarım), 4 (DHCP yenileme) ve 7 (yeniden başlatma) seçenekleri aktif bağlantıları etkileyebilir. VPN, kurumsal ağ veya statik IP kullanan cihazlarda yetkili ağ yöneticisinin onayı olmadan çalıştırmayın. Raporlar IP/adaptör ve yapılandırma bilgileri içerebilir; herkese açık paylaşmadan önce inceleyin. Dosyanın gerçek Windows üzerinde uçtan uca testi ayrıca yapılmalıdır.
+**Güvenlik:** Başlatıcılar yerel PowerShell dosyasını `-ExecutionPolicy Bypass` ile başlatır; bu yalnızca ilgili işlem için kullanılır, makine genelindeki ilkeyi değiştirmez. Kaynak kodu çalıştırmadan önce inceleyin. Kurumsal bilgisayarda izin verilen çalıştırma politikalarına uyun. Özellikle yönetici yetkili ağ işlemlerini kurum izni olmadan çalıştırmayın.
 
-### Kullanım
+**Yedekleme:** Önce Robocopy'nin `/L` ön izlemesi çalışır; devam etmek için `YEDEKLE` yazılmalıdır. `/MIR`, `/PURGE`, `/MOV` ve `/MOVE` kullanılmaz. Ancak hedefte aynı isimli dosyalar **değiştirilebilir**. Önemli belgeler için tercihen boş bir hedef klasör seçin ve yedeği doğrulayın.
 
-1. BAT dosyasını indirin.
-2. Kendi Windows bilgisayarınızda dosya içeriğini kontrol ederek açın.
-3. Önce **1 — Ağ bilgilerini kaydet** veya **5 — Bağlantı testleri** seçeneğini kullanın.
-4. Onarım işlemlerini yalnızca ne yapacaklarını biliyorsanız uygulayın.
+**Karşılaştırma:** Dosyaların içeriğini eşitlik açısından hash'lemez; boyut ve son değiştirilme tarihini kullanır. Büyük Dosya Bulucu ve Klasör Karşılaştırma erişilemeyen dosyalara rastlarsa rapor eksik olabilir.
 
-Bu depo Skype Kurumsal tanılama dosyalarını içermez.
+**Gizlilik:** Programlar bir sunucuya veri göndermez. Sistem ve dosya yolları gibi bilgiler raporlarda bulunabilir; raporları yayımlamadan önce kontrol edin.
+
+**Test durumu:** Dosyalar yazıldı ve GitHub'a kaydedildi. Gerçek Windows ortamında uçtan uca test edilmediler. Deneysel sürüm olarak değerlendirilmelidir.
+
+Skype Kurumsal takip aracı bu depoya dahil edilmedi.
