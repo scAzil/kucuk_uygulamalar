@@ -18,7 +18,7 @@ $a = @{}; $b = @{}
 foreach ($f in $leftFiles) { $a[$f.FullName.Substring($left.Length).TrimStart([char]'\')] = $f }
 foreach ($f in $rightFiles) { $b[$f.FullName.Substring($right.Length).TrimStart([char]'\')] = $f }
 $changes = New-Object 'System.Collections.Generic.List[object]'
-foreach ($key in @(($a.Keys + $b.Keys) | Sort-Object -Unique)) {
+foreach ($key in @((@($a.Keys) + @($b.Keys)) | Sort-Object -Unique)) {
   $x = $a[$key]; $y = $b[$key]
   $status = ''
   if ($null -eq $x) { $status = 'Yalnizca_ikinci_klasorde' }
